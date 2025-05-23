@@ -4,13 +4,21 @@ import functools
 def with_db_connection(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        conn = sqlite3.connect('example.db')
+        conn = pyodbc.connect(
+                'DRIVER={ODBC Driver 18 for SQL Server};'
+                'SERVER=localhost,1433;'  
+                'DATABASE=AirBnB_Clone;'
+                'UID=sa;'
+                'PWD=20252025aS@;'
+                'Encrypt=yes;'
+                'TrustServerCertificate=yes;'
+            )
         try:
             result = func(conn, *args, **kwargs)
         finally:
             conn.close()
         return result
-    return wrapper 
+    return wrapper
 
 def transactional(func):
     @functools.wraps(func)
