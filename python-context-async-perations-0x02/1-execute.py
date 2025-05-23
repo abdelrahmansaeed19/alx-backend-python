@@ -37,12 +37,6 @@ class DatabaseConnection:
         self.conn.close()
         self.connection = False
 
-    def execute_query(self, query):
-        if not self.connection:
-            raise Exception("Database not connected")
-        else:
-            print(f"Executing query: {query}")
-
 class ExcuteQuery:
     def __init__(self, query):
         self.query = query
@@ -61,7 +55,9 @@ class ExcuteQuery:
 
 with DatabaseConnection("AirBnB_Clone", None) as db:
     db.connect()
-    db.execute_query("SELECT * FROM users WHERE age > ? 25")
+    with ExcuteQuery("SELECT * FROM users WHERE age > ? 25") as query:
+        result = query.execute()
+        print(result)
     print("Query executed successfully")
 
     
