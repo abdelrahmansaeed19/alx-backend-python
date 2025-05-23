@@ -55,7 +55,7 @@ class ExcuteQuery:
 
 with DatabaseConnection("AirBnB_Clone", None) as db:
     db.connect()
-    with ExcuteQuery("SELECT * FROM users WHERE age > ? 25") as query:
+    with ExcuteQuery("SELECT * FROM users WHERE age > 25") as query:
         result = query.execute()
         print(result)
     print("Query executed successfully")
