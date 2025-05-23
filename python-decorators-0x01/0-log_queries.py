@@ -1,6 +1,7 @@
 import sqlite3
 import functools
 import pyodbc
+from datetime import datetime
 
 conn = pyodbc.connect(
     'DRIVER={ODBC Driver 18 for SQL Server};'
