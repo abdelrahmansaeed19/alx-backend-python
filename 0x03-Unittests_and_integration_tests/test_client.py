@@ -120,6 +120,10 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
         # Create a side effect for requests.get
         def side_effect(url: str):
+            """
+            Side effect function to return the appropriate mocked response.
+            """
+
             if url == GithubOrgClient.ORG_URL.format(org="google"):
                 return MockResponse(cls.org_payload)
             elif url == cls.org_payload.get("repos_url"):
@@ -134,16 +138,25 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.get_patcher.stop()
 
     def test_public_repos(self):
+        """
+        Test that public_repos returns all expected repository names
+        based on the fixture payload.
+        """
+
         client = GithubOrgClient("google")
         self.assertEqual(client.public_repos(), self.expected_repos)
 
     def test_public_repos_with_license(self):
+        """
+        Test that public_repos returns only repositories matching
+        the apache-2.0 license key from the fixture payload.
+        """
+
         client = GithubOrgClient("google")
         self.assertEqual(
             client.public_repos(license="apache-2.0"),
             self.apache2_repos
         )
-
 
 
 class MockResponse:
