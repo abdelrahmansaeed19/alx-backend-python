@@ -8,7 +8,10 @@ This module tests the retrieval of organization metadata using mocked requests.
 import unittest
 from unittest.mock import patch, PropertyMock
 from parameterized import parameterized
+from parameterized import parameterized_class
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
+import requests
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -86,3 +89,56 @@ class TestGithubOrgClient(unittest.TestCase):
         """
         result = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(result, expected)
+
+
+@parameterized_class([
+    {
+        "org_payload": org_payload,
+        "repos_payload": repos_payload,
+        "expected_repos": expected_repos,
+        "apache2_repos": apache2_repos
+    }
+    for org_payload, repos_payload,
+    expected_repos, apache2_repos in TEST_PAYLOAD
+])
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """
+    Integration test class for GithubOrgClient.
+
+    Only external requests (requests.get) are mocked using fixtures.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        """
+        Set up class-level patching of requests.get using fixture side_effects.
+        """
+        cls.get_patcher = patch("requests.get")
+
+        # Start patching
+        cls.mock_get = cls.get_patcher.start()
+
+        # Create a side effect for requests.get
+        def side_effect(url: str):
+            if url == GithubOrgClient.ORG_URL.format(org="google"):
+                return MockResponse(cls.org_payload)
+            elif url == cls.org_payload.get("repos_url"):
+                return MockResponse(cls.repos_payload)
+            return MockResponse(None)
+
+        cls.mock_get.side_effect = side_effect
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """Stop the patcher."""
+        cls.get_patcher.stop()
+
+
+class MockResponse:
+    """Simple mock for requests.Response with a json() method."""
+
+    def __init__(self, payload):
+        self._payload = payload
+
+    def json(self):
+        return self._payload
