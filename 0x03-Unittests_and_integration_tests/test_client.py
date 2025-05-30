@@ -163,7 +163,21 @@ class MockResponse:
     """Simple mock for requests.Response with a json() method."""
 
     def __init__(self, payload):
+        """
+        Initialize the mock response with the given payload.
+
+        Args:
+            payload: The JSON-serializable data to return from .json().
+        """
+
         self._payload = payload
 
     def json(self):
+        """
+        Return the mocked JSON payload.
+
+        Returns:
+            The mock data set during initialization.
+        """
+
         return self._payload
