@@ -5,9 +5,10 @@ import uuid
 class User(AbstractUser):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
-    # Password field is inherited from AbstractUser
+    password = models.CharField(max_length=128)
     # first_name and last_name also inherited but we redeclare here to avoid the checks failing
-    
+    phone_number = models.CharField(max_length=20, blank=True, null=True)  # Newly added
+
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
 
@@ -31,7 +32,8 @@ class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_sent')
-    content = models.TextField()
+    message_body = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
