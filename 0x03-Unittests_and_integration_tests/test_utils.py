@@ -17,5 +17,6 @@ class TestAccessNestedMap(unittest.TestCase):
 
     def test_access_nested_map_exception(self):
         nested_map = {"a": {"b": {"c": 1}}}
-        with self.assertRaises(KeyError):
+        with self.assertRaises(KeyError) as context:
             access_nested_map(nested_map, ["a", "b", "d"])
+        self.assertEqual(str(context.exception), f"'c'")
