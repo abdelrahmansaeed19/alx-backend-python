@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-import parameterized
+from parameterized import parameterized
 import unittest
 from utils import access_nested_map, get_json, memoize
 
 class TestAccessNestedMap(unittest.TestCase):
     """Test access_nested_map function."""
     
-    @parameterized.parameterized.expand([
+    @parameterized.expand([
         ({"a": 1}, ("a",), 1),
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2),
