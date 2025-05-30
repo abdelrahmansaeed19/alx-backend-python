@@ -6,7 +6,7 @@ This module tests the retrieval of organization metadata using mocked requests.
 """
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 from parameterized import parameterized
 from client import GithubOrgClient
 
@@ -46,3 +46,28 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_org.return_value = payload
             client = GithubOrgClient("test-org")
             self.assertEqual(client._public_repos_url, payload["repos_url"])
+    
+    @patch("client.get_json")
+    def test_public_repos(self, mock_get_json) -> None:
+        """
+        Unit-test GithubOrgClient.public_repos.
+
+        Mocks get_json and _public_repos_url to return controlled data.
+        Verifies that the result is as expected and both mocks are called once.
+        """
+        test_payload = [
+            {"name": "repo1"},
+            {"name": "repo2"},
+            {"name": "repo3"},
+        ]
+        mock_get_json.return_value = test_payload
+
+        with patch.object(GithubOrgClient, "_public_repos_url",
+                          new_callable=PropertyMock) as mock_url:
+            mock_url.return_value = "https://fake-url.com/orgs/test/repos"
+            client = GithubOrgClient("test")
+            result = client.public_repos()
+
+            self.assertEqual(result, ["repo1", "repo2", "repo3"])
+            mock_get_json.assert_called_once_with("https://fake-url.com/orgs/test/repos")
+            mock_url.assert_called_once()
