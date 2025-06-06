@@ -71,7 +71,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication'  # Optional, if you want to use token auth
         # You can add other authentication classes like TokenAuthentication if needed
     ],
-    'DEFAULT_PAGINATION_CLASS': 'chats.pagination.MessagePagination',  # Custom pagination class
+    'DEFAULT_PAGINATION_CLASS': 'chats.pagination.MessagePagination',  # <- PageNumberPagination subclass
     'PAGE_SIZE': 20,  # Default page size for pagination
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',  # Enable filtering
