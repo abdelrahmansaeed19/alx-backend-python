@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
@@ -69,6 +70,11 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication'  # Optional, if you want to use token auth
         # You can add other authentication classes like TokenAuthentication if needed
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'chats.pagination.MessagePagination',  # Custom pagination class
+    'PAGE_SIZE': 20,  # Default page size for pagination
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',  # Enable filtering
     ],
 }
 
