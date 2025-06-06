@@ -17,3 +17,25 @@ class IsOwnerOfMessageOrConversation(permissions.BasePermission):
 
         # Default deny if object doesn't match known types
         return False
+    
+class IsParticipantOfConversation(permissions.BasePermission):
+    """
+    Custom permission to only allow participants of a conversation
+    to view, send, update, or delete messages in that conversation.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # If obj is a Message, access the related conversation
+        conversation = getattr(obj, 'conversation', None)
+        if conversation:
+            return request.user in conversation.participants.all()
+
+        # If obj is a Conversation
+        if hasattr(obj, 'participants'):
+            return request.user in obj.participants.all()
+
+        return False
+
+    def has_permission(self, request, view):
+        # Allow access only to authenticated users
+        return request.user and request.user.is_authenticated
