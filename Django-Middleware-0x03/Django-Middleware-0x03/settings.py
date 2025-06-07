@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'chats.middleware.RequestLoggingMiddleware',
     'chats.middleware.RestrictAccessByTimeMiddleware',
-    'chats.middleware.offensive_language.OffensiveLanguageMiddleware',    # Custom middleware for time-based access restriction
+    'chats.middleware.OffensiveLanguageMiddleware',    # Custom middleware for time-based access restriction
 ]
 
 LOGGING = {
