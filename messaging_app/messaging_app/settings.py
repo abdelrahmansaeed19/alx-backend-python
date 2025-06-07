@@ -58,7 +58,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'messaging_app.urls'
 
-CORS_ALLOWED_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Your React/Vue/Angular dev server
+    "http://127.0.0.1:8000",  # Django dev server (if you're accessing it directly)
+    # Your production frontend domain
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
