@@ -12,7 +12,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"yourpassword\"\n}",
+          "raw": "{\n  \"username\": \"abdo\",\n  \"password\": \"20252025aS\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -20,7 +20,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8000/api/token/",
+          "raw": "http://http://127.0.0.1:8000/api/token/",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8000",
@@ -50,7 +50,7 @@
           "raw": "{\n  \"participants\": [1, 2]\n}"
         },
         "url": {
-          "raw": "http://localhost:8000/api/conversations/",
+          "raw": "http://http://127.0.0.1:8000/api/conversations/",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8000",
@@ -80,7 +80,7 @@
           "raw": "{\n  \"content\": \"Hello from Postman!\"\n}"
         },
         "url": {
-          "raw": "http://localhost:8000/api/conversations/1/messages/",
+          "raw": "http://127.0.0.1:8000/api/conversations/1/messages/",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8000",
@@ -101,7 +101,7 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8000/api/conversations/",
+          "raw": "http://127.0.0.1:8000/api/conversations/",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8000",
@@ -116,7 +116,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8000/api/conversations/1/",
+          "raw": "http://127.0.0.1:8000/api/conversations/1/",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8000",
