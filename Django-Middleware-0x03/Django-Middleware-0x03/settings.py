@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'chats.middleware.RequestLoggingMiddleware',
     'chats.middleware.RestrictAccessByTimeMiddleware',
     'chats.middleware.OffensiveLanguageMiddleware',
-    'chats.middleware.RolePermissionMiddleware'    # Custom middleware for time-based access restriction
+    'chats.middleware.RolepermissionMiddleware'    # Custom middleware for time-based access restriction
 ]
 
 LOGGING = {
