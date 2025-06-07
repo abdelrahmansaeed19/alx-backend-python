@@ -54,7 +54,50 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'chats.middleware.RequestLoggingMiddleware',  # Custom middleware for logging requests
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False, # Keep existing loggers (like Django's default console logger)
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'request_file': { # Define a new file handler for our custom logger
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'request_logs.log', # This file will be created in your project root
+            'formatter': 'verbose', # Use the verbose format for detailed logs
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # Our custom logger configuration
+        'request_logger': {
+            'handlers': ['request_file', 'console'], # Send logs to both file and console
+            'level': 'INFO', # Log messages with INFO level or higher
+            'propagate': False, # Crucial: Prevent messages from being passed to the root logger
+                                # which might duplicate them in the console or other default handlers.
+        },
+    },
+}
 
 ROOT_URLCONF = 'messaging_app.urls'
 
