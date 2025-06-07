@@ -113,3 +113,23 @@ class OffensiveLanguageMiddleware:
         if x_forwarded_for:
             return x_forwarded_for.split(',')[0]
         return request.META.get('REMOTE_ADDR')
+    
+class RolePermissionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Define paths or actions you want to protect
+        protected_paths = ['/admin-action/', '/moderator-only/']
+
+        if request.path in protected_paths:
+            user = getattr(request, 'user', None)
+            if not user or not user.is_authenticated:
+                return HttpResponseForbidden("Access denied: You must be logged in.")
+
+            # Assuming 'role' is a field in the user model or accessible via profile
+            user_role = getattr(user, 'role', None)
+            if user_role not in ['admin', 'moderator']:
+                return HttpResponseForbidden("Access denied: Admin or Moderator role required.")
+
+        return self.get_response(request)
