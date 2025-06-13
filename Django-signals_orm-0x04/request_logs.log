@@ -1,0 +1,3 @@
+INFO 2025-06-07 13:20:06,523 middleware 85165 133616962623168 RequestLoggingMiddleware initialized and ready to log requests.
+INFO 2025-06-07 13:20:10,331 middleware 85165 133616947881664 2025-06-07 13:20:10.323693 - User: abdo - Path: /
+INFO 2025-06-07 13:21:14,398 middleware 85165 133616947881664 2025-06-07 13:21:14.394079 - User: abdo - Path: /

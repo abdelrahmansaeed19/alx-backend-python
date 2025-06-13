@@ -1,0 +1,151 @@
+{
+  "info": {
+    "name": "Messaging App API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab"
+  },
+  "item": [
+    {
+      "name": "1. JWT Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"abdo\",\n  \"password\": \"20252025aS\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://http://127.0.0.1:8000/api/token/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "token", ""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Create Conversation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"participants\": [1, 2]\n}"
+        },
+        "url": {
+          "raw": "http://http://127.0.0.1:8000/api/conversations/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "conversations", ""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Send Message",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": \"Hello from Postman!\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/conversations/1/messages/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "conversations", "1", "messages", ""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Fetch Conversations",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/conversations/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "conversations", ""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Unauthorized Access Test",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/conversations/1/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "conversations", "1", ""]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [],
+        "type": "text/javascript"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "exec": [],
+        "type": "text/javascript"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": ""
+    }
+  ]
+}
