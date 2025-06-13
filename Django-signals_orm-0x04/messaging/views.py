@@ -49,6 +49,11 @@ def send_message(request):
         users = User.objects.exclude(id=request.user.id)
         return render(request, "messaging/send_message.html", {"users": users})
 
+@login_required
+def unread_messages_view(request):
+    unread_messages = Message.unread.for_user(request.user)  # ✅ Using custom manager
+    return render(request, "messaging/unread_messages.html", {"unread_messages": unread_messages})
+
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer

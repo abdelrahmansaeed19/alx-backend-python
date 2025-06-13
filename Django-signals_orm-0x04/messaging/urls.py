@@ -1,6 +1,6 @@
 from django.urls import path, include
 #from rest_framework import routers
-from .views import ConversationViewSet, MessageViewSet
+from .views import ConversationViewSet, MessageViewSet, unread_messages_view
 from rest_framework_nested import routers
 
 router = routers.DefaultRouter()
@@ -13,4 +13,5 @@ conversations_router.register(r'messages', MessageViewSet, basename='conversatio
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('inbox/unread/', unread_messages_view, name='unread_messages'),
 ]
