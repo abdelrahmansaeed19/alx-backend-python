@@ -44,6 +44,13 @@ class Message(models.Model):
         blank=True,
         related_name='edited_messages'
     )
+    parent_message = models.ForeignKey(  # ✅ self-referential link
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='replies'
+    )
 
     def __str__(self):
         return f"Message from {self.sender.username} at {self.timestamp}"
