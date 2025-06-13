@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
+from .managers import UnreadMessagesManager  # Importing the custom manager
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -27,11 +28,6 @@ class Conversation(models.Model):
     def __str__(self):
         participant_usernames = ', '.join([user.username for user in self.participants.all()])
         return f"Conversation between {participant_usernames}"
-
-class UnreadMessagesManager(models.Manager):
-    def for_user(self, user):
-        return self.get_queryset().filter(receiver=user, read=False).only("id", "sender", "content", "timestamp")
-
 
 class Message(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
