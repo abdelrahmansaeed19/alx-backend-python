@@ -32,3 +32,4 @@ def cleanup_user_data(sender, instance, **kwargs):
     # Sent and received messages are deleted via CASCADE
     # But message history may still reference edited_by or editor
     MessageHistory.objects.filter(editor=instance).delete()
+    Message.objects.filter(receiver=instance).delete()
