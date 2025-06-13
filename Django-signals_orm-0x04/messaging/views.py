@@ -10,6 +10,10 @@ from .permissions import IsOwnerOfMessageOrConversation, IsParticipantOfConversa
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import MessageFilter
 from .pagination import MessagePagination
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.contrib.auth.models import User
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
@@ -94,3 +98,9 @@ class MessageViewSet(viewsets.ModelViewSet):
 
         serializer.save(sender=self.request.user, conversation=conversation)
 
+@login_required
+def delete_user(request):
+    user = request.user
+    logout(request)  # Log user out first
+    user.delete()  # Triggers post_delete signal
+    return redirect('home')  # Replace with your homepage/view

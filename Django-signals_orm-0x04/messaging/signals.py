@@ -1,6 +1,7 @@
 # messaging/signals.py
 
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
+from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Message, Notification, MessageHistory
 
@@ -25,3 +26,9 @@ def log_message_edit(sender, instance, **kwargs):
             old_content=old_message.content
         )
         instance.edited = True  # Mark message as edited
+
+@receiver(post_delete, sender=User)
+def cleanup_user_data(sender, instance, **kwargs):
+    # Sent and received messages are deleted via CASCADE
+    # But message history may still reference edited_by or editor
+    MessageHistory.objects.filter(editor=instance).delete()
