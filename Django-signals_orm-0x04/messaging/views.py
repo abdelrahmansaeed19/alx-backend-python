@@ -13,8 +13,41 @@ from .pagination import MessagePagination
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.db.models import Prefetch
 from django.contrib.auth.models import User
 
+
+# Fetch top-level messages and their direct replies in one go
+messages = Message.objects.filter(parent_message__isnull=True) \
+    .select_related('sender', 'receiver') \
+    .prefetch_related(
+        Prefetch('replies', queryset=Message.objects.select_related('sender', 'receiver'))
+    )
+
+@login_required
+def send_message(request):
+    if request.method == "POST":
+        content = request.POST.get("content")
+        receiver_id = request.POST.get("receiver_id")
+        parent_id = request.POST.get("parent_id")
+
+        receiver = get_object_or_404(User, id=receiver_id)
+        parent_message = None
+
+        if parent_id:
+            parent_message = get_object_or_404(Message, id=parent_id)
+
+        Message.objects.create(
+            sender=request.user,  # ✅ sets the sender
+            receiver=receiver,    # ✅ sets the receiver
+            content=content,
+            parent_message=parent_message
+        )
+
+        return redirect("inbox")  # Replace with your actual redirect
+    else:
+        users = User.objects.exclude(id=request.user.id)
+        return render(request, "messaging/send_message.html", {"users": users})
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
@@ -104,3 +137,4 @@ def delete_user(request):
     logout(request)  # Log user out first
     user.delete()  # Triggers post_delete signal
     return redirect('home')  # Replace with your homepage/view
+
