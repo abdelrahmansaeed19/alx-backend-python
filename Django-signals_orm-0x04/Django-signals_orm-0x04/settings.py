@@ -106,6 +106,13 @@ ROOT_URLCONF = 'messaging_app.urls'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Your React/Vue/Angular dev server
     "http://127.0.0.1:8000",  # Django dev server (if you're accessing it directly)

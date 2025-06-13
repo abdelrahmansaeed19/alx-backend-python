@@ -15,6 +15,7 @@ from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.db.models import Prefetch
 from django.contrib.auth.models import User
+from django.views.decorators.cache import cache_page
 
 
 # Fetch top-level messages and their direct replies in one go
@@ -24,6 +25,7 @@ messages = Message.objects.filter(parent_message__isnull=True) \
         Prefetch('replies', queryset=Message.objects.select_related('sender', 'receiver'))
     )
 
+@cache_page(60)  # Cache this view for 15 minutes
 @login_required
 def send_message(request):
     if request.method == "POST":
