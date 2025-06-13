@@ -28,6 +28,11 @@ class Conversation(models.Model):
         participant_usernames = ', '.join([user.username for user in self.participants.all()])
         return f"Conversation between {participant_usernames}"
 
+class UnreadMessagesManager(models.Manager):
+    def for_user(self, user):
+        return self.get_queryset().filter(receiver=user, read=False).only("id", "sender", "content", "timestamp")
+
+
 class Message(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
@@ -36,6 +41,7 @@ class Message(models.Model):
     content = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
     edited = models.BooleanField(default=False)  # ✅ New field to track edits
     edited_by = models.ForeignKey(  # <-- NEW FIELD
         User,
@@ -51,6 +57,11 @@ class Message(models.Model):
         blank=True,
         related_name='replies'
     )
+
+    # Managers
+    objects = models.Manager()  # Default manager
+    unread = UnreadMessagesManager()  # ✅ Custom unread manager
+
 
     def __str__(self):
         return f"Message from {self.sender.username} at {self.timestamp}"
